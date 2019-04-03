@@ -1,5 +1,7 @@
 alembic==0.8.2
 amqp==2.3.2
+awscli
+boto3==1.9.127
 Babel==2.6.0
 Beaker==1.9.1
 cachetools==2.1.0

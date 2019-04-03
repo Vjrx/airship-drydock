@@ -277,6 +277,27 @@ class YamlIngester(IngesterPlugin):
 
         return model
 
+    def process_drydock_awsnode(self, name, data):
+        """Process the data/spec section of a NetworkLink document.
+    
+        :param name: the document name attribute
+        :param data: the dictionary of the data/spec section
+        """
+        model = objects.AwsNode()
+
+        model.source = hd_fields.ModelSource.Designed
+        model.name = name
+
+        model.metalabels = data.get('labels', {})
+
+        model.image_id = data.get('image_id', None)
+        model.instance_type = data.get('instance_type', None)
+        model.subnet_id = data.get('subnet_id', None)
+        model.sec_grp = data.get('sec_grp', None)
+
+        return model
+
+
     def process_drydock_network(self, name, data):
         """Process the data/spec section of a Network document.
 
@@ -656,4 +677,5 @@ class YamlIngester(IngesterPlugin):
         'HostProfile': process_drydock_hostprofile,
         'BaremetalNode': process_drydock_node,
         'BootAction': process_drydock_bootaction,
+        'AwsNode': process_drydock_awsnode,
     }

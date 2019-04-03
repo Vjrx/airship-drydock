@@ -33,7 +33,7 @@ def register_all():
     importlib.import_module('drydock_provisioner.objects.task')
     importlib.import_module('drydock_provisioner.objects.builddata')
     importlib.import_module('drydock_provisioner.objects.validation')
-
+    importlib.import_module('drydock_provisioner.objects.awsnode')
 
 # Utility class for calculating inheritance
 

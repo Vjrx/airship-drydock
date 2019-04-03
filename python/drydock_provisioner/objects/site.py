@@ -173,6 +173,8 @@ class SiteDesign(base.DrydockPersistentObject, base.DrydockObject):
         ovo_fields.ObjectField('RackList', nullable=True),
         'bootactions':
         ovo_fields.ObjectField('BootActionList', nullable=True),
+        'aws_node':
+        ovo_fields.ObjectField('AwsNode', nullable=True),
     }
 
     def __init__(self, **kwargs):
@@ -192,6 +194,12 @@ class SiteDesign(base.DrydockPersistentObject, base.DrydockObject):
 
     def set_site(self, site):
         self.site = site
+
+    def get_aws_node(self):
+        return self.aws_node
+
+    def set_aws_node(self,aws_node):
+        self.aws_node = aws_node
 
     def add_network(self, new_network):
         if new_network is None:

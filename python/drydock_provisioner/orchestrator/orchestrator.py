@@ -93,6 +93,15 @@ class Orchestrator(object):
                 if node_driver_class is not None:
                     self.enabled_drivers['node'] = node_driver_class(
                         state_manager=state_manager, orchestrator=self)
+            
+            aws_driver_name = enabled_drivers.aws_driver
+            if aws_driver_name is not None:
+                m, c = aws_driver_name.rsplit('.', 1)
+                aws_driver_class = \
+                    getattr(importlib.import_module(m), c, None)
+                if aws_driver_class is not None:
+                    self.enabled_drivers['aws'] = aws_driver_class(
+                        state_manager=state_manager, orchestrator=self)
 
             network_driver_name = enabled_drivers.network_driver
             if network_driver_name is not None:
@@ -310,6 +319,7 @@ class Orchestrator(object):
         val = Validator(self)
         try:
             status, site_design = self.get_described_site(design_ref)
+
             if status.status == hd_fields.ValidationResult.Success:
                 self.compute_model_inheritance(
                     site_design, resolve_aliases=resolve_aliases)
@@ -324,8 +334,10 @@ class Orchestrator(object):
                     ctx='NA',
                     ctx_type='NA')
                 status.set_status(hd_fields.ActionResult.Failure)
+
             self.logger.error(
                 "Error getting site definition: %s" % str(ex), exc_info=ex)
+
 
         return status, site_design
 
@@ -403,7 +415,10 @@ class Orchestrator(object):
         try:
             target_nodes = site_design.baremetal_nodes
             if target_nodes is None:
-                raise AttributeError()
+                if site_design.aws_node:
+                    return "awsnode"
+                else: 
+                    raise AttributeError()
         except AttributeError:
             self.logger.debug(
                 "Invalid site design, no baremetal nodes in site_design.")

@@ -63,6 +63,13 @@ def drydock(ctx, debug, url, os_project_domain_name, os_user_domain_name,
         'username': os_username,
         'password': os_password,
         'auth_url': os_auth_url,
+       # 'project_domain_name': 'ucp',
+       # 'user_domain_name': 'ucp',
+       # 'project_name': 'service',
+       # 'username': 'drydock',
+       # 'password': 'drydock',
+       # 'auth_url': 'http://keystone:35357/v3',
+
     }
 
     # setup logging for the CLI

@@ -168,8 +168,14 @@ class DrydockConfig(object):
         cfg.StrOpt(
             'node_driver',
             default=
+            #'drydock_provisioner.drivers.node.awsdriver.driver.AwsNodeDriver',
             'drydock_provisioner.drivers.node.maasdriver.driver.MaasNodeDriver',
             help='Module path string of the Node driver to enable'),
+        cfg.StrOpt(
+            'aws_driver',
+            default=
+            'drydock_provisioner.drivers.node.awsdriver.driver.AwsNodeDriver',
+            help='Module path string of the aws driver to enable'),
         cfg.StrOpt(
             'kubernetes_driver',
             default=

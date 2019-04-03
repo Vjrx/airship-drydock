@@ -26,7 +26,7 @@ import drydock_provisioner.objects.hostprofile as hostprofile
 import drydock_provisioner.objects.promenade as prom
 import drydock_provisioner.objects.rack as rack
 import drydock_provisioner.objects.bootaction as bootaction
-
+import drydock_provisioner.objects.awsnode as awsnode
 
 class Ingester(object):
     def __init__(self):
@@ -124,4 +124,7 @@ class Ingester(object):
                 design_data.add_rack(m)
             elif type(m) is bootaction.BootAction:
                 design_data.add_bootaction(m)
+            elif type(m) is awsnode.AwsNode:
+                design_data.set_aws_node(m)
+
         return status, design_data

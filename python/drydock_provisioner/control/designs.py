@@ -197,9 +197,9 @@ class DesignsPartsResource(StatefulResource):
         part_catalog = []
 
         site = design.get_site()
-
+        aws = design.get_aws_node()
         part_catalog.append({'kind': 'Region', 'key': site.get_id()})
-
+        part_catalog.append({'kind': 'AwsNode', 'key': aws.get_id()})
         part_catalog.extend([{
             'kind': 'Network',
             'key': n.get_id()
@@ -261,6 +261,8 @@ class DesignsPartResource(StatefulResource):
             part = None
             if kind == 'Site':
                 part = design.get_site()
+            elif kind == 'AwsNode':
+                part = design.get_aws_node()
             elif kind == 'Network':
                 part = design.get_network(name)
             elif kind == 'NetworkLink':

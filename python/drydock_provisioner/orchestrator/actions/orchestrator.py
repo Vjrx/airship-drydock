@@ -23,7 +23,6 @@ import drydock_provisioner.config as config
 import drydock_provisioner.error as errors
 import drydock_provisioner.objects.fields as hd_fields
 
-
 class BaseAction(object):
     """The base class for actions starts by the orchestrator."""
 
@@ -895,6 +894,42 @@ class DeployNodes(BaseAction):
             return
 
         target_nodes = self.orchestrator.get_target_nodes(self.task)
+        
+        if target_nodes == 'awsnode':
+            aws_driver = self.orchestrator.enabled_drivers['aws']
+            self.task.add_status_msg(
+                msg="Enabled aws node",
+                error=False,
+                ctx=str(self.task.get_id()),
+                ctx_type='task')
+
+            aws_driver = self.orchestrator.enabled_drivers['aws']
+            node_deploy_task = self.orchestrator.create_task(
+                       design_ref=self.task.design_ref,
+                       action=hd_fields.OrchestratorAction.DeployNode,
+                       )
+            self.task.register_subtask(node_deploy_task)
+
+            self.task.add_status_msg(
+                msg="Started creating instances in aws",
+                error=False,
+                ctx=str(node_deploy_task.get_id()),
+                ctx_type='task')
+           
+            try:
+                aws_driver.execute_task(node_deploy_task.get_id())
+                self.task.set_status(hd_fields.TaskStatus.Complete)
+                self.task.save()
+
+
+            except Exception as var:
+                self.task.add_status_msg(
+                msg= str(var),
+                error=True,
+                ctx=str(node_deploy_task.get_id()),
+                ctx_type='task')
+            
+            return    
 
         if not target_nodes:
             self.task.add_status_msg(

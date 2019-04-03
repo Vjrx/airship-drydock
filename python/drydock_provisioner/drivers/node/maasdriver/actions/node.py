@@ -2263,6 +2263,7 @@ class DeployNode(BaseMaasAction):
 
         try:
             site_design = self._load_site_design()
+
         except errors.OrchestratorError:
             self.task.add_status_msg(
                 msg="Error loading site design.",
